@@ -1,0 +1,39 @@
+﻿@page "/"
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@{
+    AppSettings settings = Configuration.Get<AppSettings>()!;
+    string esriKey = settings.ArcGISApiKey;
+    string geoBlazorKey = settings.GeoBlazor.LicenseKey;
+    string mauiAssemblyName = settings.GeoBlazor.MauiAppName;
+    string actualAssemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name!;
+    // Do your things
+}
+<dl>
+    <dt>ArcGIS Key (from settings):</dt>
+    <dd>@esriKey</dd>
+    <dt>GeoBlazor Key (from settings):</dt>
+    <dd>@geoBlazorKey</dd>
+    <dt>MauiAssemblyName (from settings):</dt>
+    <dd>@mauiAssemblyName</dd>
+    <dt>Assembly Name (from reflection):</dt>
+    <dd>@actualAssemblyName</dd>
+</dl>
+
+<MapView Longitude="_longitude" Latitude="_latitude" Zoom="13" Style="height: 100vh; width: 100%;" WhiteLabel="" >
+    <Map>
+        <Basemap>
+            <BasemapStyle Name="BasemapStyleName.ArcgisNavigation" />
+        </Basemap>
+        <GraphicsLayer @ref="_graphicsLayer" />
+    </Map>
+    <CompassWidget Position="OverlayPosition.TopLeft" />
+    <TrackWidget Position="OverlayPosition.TopLeft" />
+</MapView>
+
+@code {
+    private readonly double _latitude = 45.520669445800834;
+    private readonly double _longitude = -122.99227650469551;
+    private GraphicsLayer? _graphicsLayer = new();
+
+}
